@@ -1,4 +1,7 @@
 # Plugin's routes
 # See: http://guides.rubyonrails.org/routing.html
 
-get '/work_info/', :to => 'work_info#user_list'
+RedmineApp::Application.routes.draw do
+  match 'work_info/:action', :to => 'work_info#user_list'
+  match 'work_info/:action/:id', :to => 'work_info#user_detail'
+end

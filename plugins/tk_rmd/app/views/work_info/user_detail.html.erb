@@ -1,1 +1,65 @@
-<h2>WorkInfoController#user_detail</h2>
+<style type="text/css">
+    #show table {
+        border-collapse: collapse;
+        border-spacing: 0
+    }
+
+    #show ul {
+        list-style: none
+    }
+
+    #show input {
+        font-size: 12px
+    }
+
+    #show a {
+        cursor: pointer
+    }
+
+    #show a:link {
+        color: #369;
+        text-decoration: none
+    }
+
+    #show a:visited {
+        color: #369;
+        text-decoration: none
+    }
+
+    a:hover {
+        color: #BA2636;
+        text-decoration: none;
+        /*background: #039*/
+    }
+
+    #show a img {
+        border-width: 0;
+        vertical-align: middle
+    }
+
+    #show body, td, th {
+        font: 12px Arial, Helvetica, sans-serif;
+        line-height: 162%
+    }
+
+    #show table {
+        border-collapse: collapse;
+        border: 0;
+        padding: 0;
+        margin: 0
+    }
+
+</style>
+
+<div id="web_contents" style="display: none">
+  <%= @web_contents %>
+</div>
+<div id="show">
+
+</div>
+<script type="text/javascript">
+    var _html = $('#web_contents').text();
+    _html = $.trim(_html.replace(/\n/g, ''));
+    //_html = _html.match(/<body>.<\/body>/g);
+    $('#show').html(_html);
+</script>
