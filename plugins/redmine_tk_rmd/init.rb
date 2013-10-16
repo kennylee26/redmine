@@ -1,4 +1,4 @@
-Redmine::Plugin.register :tk_rmd do
+Redmine::Plugin.register :redmine_tk_rmd do
   name 'Timekey Redmine辅助插件'
   author 'KennyLee'
   description 'This is a plugin for Redmine'

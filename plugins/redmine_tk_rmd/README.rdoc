@@ -1,3 +1,3 @@
-= tk_rmd
+= redmine_tk_rmd
 
 Description goes here
