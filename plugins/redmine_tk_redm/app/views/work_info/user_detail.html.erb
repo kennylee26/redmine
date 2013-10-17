@@ -1,0 +1,16 @@
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'tk_redmine.css', :plugin => 'redmine_tk_redm' %>
+<% end %>
+
+<div id="web_contents" style="display: none">
+  <%= @web_contents %>
+</div>
+<div id="show">
+
+</div>
+<script type="text/javascript">
+    var _html = $('#web_contents').text();
+    _html = $.trim(_html.replace(/\n/g, ''));
+    //_html = _html.match(/<body>.<\/body>/g);
+    $('#show').html(_html);
+</script>
