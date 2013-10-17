@@ -23,8 +23,7 @@ class WorkInfoController < ApplicationController
     else
       uid = @user.id
     end
-    #remote_url = 'http://127.0.0.1:8090/rmh/controller/user/spent/'+uid.to_s;
-    remote_url = 'http://127.0.0.1:8080/rmh/controller/user/spent/'+uid.to_s;
+    remote_url = 'http://127.0.0.1:8090/rmh/controller/user/spent/'+uid.to_s;
 
     require 'net/http'
     require 'uri'
