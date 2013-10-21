@@ -90,14 +90,11 @@ UserIssueInfo.prototype._generateIssueView = function () {
         }
         if (issue.isClosed == false) {
             var period = dueDay - today;
-            if (period < 0) {
-                //超时
+            if (period < 0) {//超时
                 _html += 'issue_over_time ';
-            } else if (period <= 2) {
-                //紧张
+            } else if (period <= 2) {//紧张
                 _html += 'issue_quick ';
-            } else if (period <= 5) {
-                //进程
+            } else if (period <= 5) {//进程
                 _html += 'issue_week ';
             }
         } else {

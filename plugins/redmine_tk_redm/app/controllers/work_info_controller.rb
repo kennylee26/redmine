@@ -1,7 +1,7 @@
 class WorkInfoController < ApplicationController
   unloadable
 
-  @@service_ip = 'http://127.0.0.1:8080/rmh/controller'
+  @@service_ip = 'http://127.0.0.1:8090/rmh/controller'
 
   def user_list
     require_login || return
