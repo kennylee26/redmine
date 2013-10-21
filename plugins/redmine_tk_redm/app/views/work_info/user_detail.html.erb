@@ -1,5 +1,7 @@
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'tk_redmine.css', :plugin => 'redmine_tk_redm' %>
+    <%= javascript_include_tag 'jquery.json-2.4.min.js', :plugin => 'redmine_tk_redm' %>
+    <%= javascript_include_tag 'tk_redmine.js', :plugin => 'redmine_tk_redm' %>
 <% end %>
 
 <div id="web_contents" style="display: none">
@@ -9,8 +11,6 @@
 
 </div>
 <script type="text/javascript">
-    var _html = $('#web_contents').text();
-    _html = $.trim(_html.replace(/\n/g, ''));
-    //_html = _html.match(/<body>.<\/body>/g);
-    $('#show').html(_html);
+    var _workInfo = new UserIssueInfo();
+    _workInfo.show();
 </script>

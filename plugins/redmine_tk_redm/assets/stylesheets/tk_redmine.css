@@ -1,49 +1,16 @@
-#show table {
-    border-collapse: collapse;
-    border-spacing: 0
+tr.issue_over_time, #main tr.issue_over_time A {
+    color: red;
 }
 
-#show ul {
-    list-style: none
+tr.issue_quick, #main tr.issue_quick A {
+    color: orange;
 }
 
-#show input {
-    font-size: 12px
+tr.issue_week, #main tr.issue_week A {
+    color: mediumpurple;
 }
 
-#show a {
-    cursor: pointer
+tr.closed, #main tr.closed A {
+    color: #999;
 }
 
-#show a:link {
-    color: #369;
-    text-decoration: none
-}
-
-#show a:visited {
-    color: #369;
-    text-decoration: none
-}
-
-#show a:hover {
-    color: #BA2636;
-    text-decoration: none;
-    /*background: #039*/
-}
-
-#show a img {
-    border-width: 0;
-    vertical-align: middle
-}
-
-#show body, td, th {
-    font: 12px Arial, Helvetica, sans-serif;
-    line-height: 162%
-}
-
-#show table {
-    border-collapse: collapse;
-    border: 0;
-    padding: 0;
-    margin: 0
-}
