@@ -14,3 +14,7 @@ tr.closed, #main tr.closed A {
     color: #999;
 }
 
+.user_detail_select div.r {
+    float: right;
+    margin: 0 5px
+}

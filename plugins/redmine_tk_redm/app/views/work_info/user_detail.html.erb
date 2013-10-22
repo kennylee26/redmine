@@ -4,6 +4,13 @@
     <%= javascript_include_tag 'tk_redmine.js', :plugin => 'redmine_tk_redm' %>
 <% end %>
 
+<% if @users != nil %>
+    <form action="/work_info/user_detail/" class="user_detail_select">
+      <div class="r"><input type="submit" value="查询"/></div>
+      <div class="r"> <%= select_tag(:user_id, options_from_collection_for_select(@users, 'id', 'name', @tid)) %></div>
+      <div style="clear: both" />
+    </form>
+<% end %>
 <div id="web_contents" style="display: none">
   <%= @web_contents %>
 </div>
