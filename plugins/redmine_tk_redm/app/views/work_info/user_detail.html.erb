@@ -4,12 +4,11 @@
     <%= javascript_include_tag 'tk_redmine.js', :plugin => 'redmine_tk_redm' %>
 <% end %>
 
-<ul style="display: none;" id="project_menu">
-  <li>
-        <input type="button" value="个人绩效情况" id="showIssueInfo" />
-    <!--<a href="javascript:void(0)" id="showIssueInfo">个人绩效情况</a>--></li>
-  <li><input type="button" value="项目任务情况" id="showProjectInfo" /><!--<a href="javascript:void(0)" id="showProjectInfo">项目任务情况</a>--></li>
-</ul>
+
+<div style="display: none;" id="project_menu" >
+  <div class="l"><input type="button" value="个人绩效情况" id="showIssueInfo" /></div>
+  <div class="l"><input type="button" value="项目任务情况" id="showProjectInfo" /></div>
+</div>
 <div style="clear: both"></div>
 <div id="issue_info_contents" style="display: none">
   <%= @issue_info_contents %>

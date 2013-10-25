@@ -19,7 +19,8 @@ tr.closed, #main tr.closed A {
     margin: 0 5px
 }
 
-#project_menu li{
+#project_menu div.l{
     float: left;
     margin-left: 1.5em;
+    height: 20px;
 }

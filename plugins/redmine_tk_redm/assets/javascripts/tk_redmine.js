@@ -54,18 +54,17 @@ WorkInfo.prototype.launch = function () {
     _userIssueInfo._create();
     var _projectIssueInfo = new ProjectIssueInfo();
     _projectIssueInfo._create();
-    _userIssueInfo.show();
     $('#showIssueInfo').click(function () {
         _projectIssueInfo.hide();
         _userIssueInfo.show();
-        $(this).css('color','gray');
-        $('#showProjectInfo').css('color','');
+        $(this).css('color', 'gray');
+        $('#showProjectInfo').css('color', '');
     }).click();
     $('#showProjectInfo').click(function () {
         _userIssueInfo.hide();
         _projectIssueInfo.show();
-        $(this).css('color','gray');
-        $('#showIssueInfo').css('color','');
+        $(this).css('color', 'gray');
+        $('#showIssueInfo').css('color', '');
     });
 };
 
@@ -102,45 +101,47 @@ UserIssueInfo.prototype._create = function () {
 };
 
 UserIssueInfo.prototype._generateView = function () {
-    var _html = '<table class="list issues">';
-    _html += '<thead><tr><th>id</th><th>状态</th>';
-    _html += '<th>项目</th>';
-    _html += '<th>标题</th><th>指派给</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
-    var today = new Date().getDate();
-    $.each(this._json.issues, function (i, issue) {
-        _html += '<tr class="issue ';
-        var dueDay = parseInt(/-(\d+)$/.exec(issue.dueDate)[1]);
-        if ((i + 1) % 2 == 0) {
-            _html += 'even ';
-        } else {
-            _html += 'odd ';
-        }
-        if (issue.isClosed == false) {
-            var period = dueDay - today;
-            if (period < 0) {//超时
-                _html += 'issue_over_time ';
-            } else if (period <= 2) {//紧张
-                _html += 'issue_quick ';
-            } else if (period <= 5) {//进程
-                _html += 'issue_week ';
+    if (this._json && this._json.issues && this._json.issues.length > 0) {
+        var _html = '<table class="list issues">';
+        _html += '<thead><tr><th>id</th><th>状态</th>';
+        _html += '<th>项目</th>';
+        _html += '<th>标题</th><th>指派给</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
+        var today = new Date().getDate();
+        $.each(this._json.issues, function (i, issue) {
+            _html += '<tr class="issue ';
+            var dueDay = parseInt(/-(\d+)$/.exec(issue.dueDate)[1]);
+            if ((i + 1) % 2 == 0) {
+                _html += 'even ';
+            } else {
+                _html += 'odd ';
             }
-        } else {
-            _html += 'closed ';
-        }
-        _html += '">';
-        _html += '<td>' + issue.id + '</td>';
-        _html += '<td>' + issue.statusName + '</td>';
-        _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
-        _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
-        _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
-        _html += '<td>' + issue.startDate + '</td>';
-        _html += '<td>' + issue.dueDate + '</td>';
-        _html += '<td>' + issue.estimatedHours + '</td>';
-        _html += '</tr>';
-    });
-    _html += '</table>';
+            if (issue.isClosed == false) {
+                var period = dueDay - today;
+                if (period < 0) {//超时
+                    _html += 'issue_over_time ';
+                } else if (period <= 2) {//紧张
+                    _html += 'issue_quick ';
+                } else if (period <= 5) {//进程
+                    _html += 'issue_week ';
+                }
+            } else {
+                _html += 'closed ';
+            }
+            _html += '">';
+            _html += '<td>' + issue.id + '</td>';
+            _html += '<td>' + issue.statusName + '</td>';
+            _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
+            _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
+            _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
+            _html += '<td>' + issue.startDate + '</td>';
+            _html += '<td>' + issue.dueDate + '</td>';
+            _html += '<td>' + issue.estimatedHours + '</td>';
+            _html += '</tr>';
+        });
+        _html += '</table>';
 
-    this._content.addClass('autoscroll').append(_html);
+        this._content.addClass('autoscroll').append(_html);
+    }
 };
 
 UserIssueInfo.prototype.show = function () {
@@ -182,53 +183,60 @@ ProjectIssueInfo.prototype._create = function () {
 };
 
 ProjectIssueInfo.prototype._generateView = function () {
-    var _html = '<table class="list issues">';
-    _html += '<thead><tr><th>id</th><th>状态</th>';
-    _html += '<th>项目</th>';
-    _html += '<th>标题</th><th>指派给</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
-    var today = new Date().getDate();
-    $.each(this._json, function (i, prjInfo) {
-        _html += '<tr class="group open"><td colspan="8">';
-        _html += '<span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>';
-        _html += '<a href="/projects/' + prjInfo.project.identifier + '">' + prjInfo.project.name + '</a>';
-        _html += '<span class="count">' + prjInfo.issues.length + '</span>';
-        _html += '<a class="toggle-all" href="#" onclick="toggleAllRowGroups(this); return false;">Collapse all/Expand all</a>';
-        _html += '</td></tr>'
-        $.each(prjInfo.issues, function (n, issue) {
-            _html += '<tr class="issue ';
-            var dueDay = parseInt(/-(\d+)$/.exec(issue.dueDate)[1]);
-            if ((n + 1) % 2 == 0) {
-                _html += 'even ';
-            } else {
-                _html += 'odd ';
-            }
-            if (issue.isClosed == false) {
-                var period = dueDay - today;
-                if (period < 0) {//超时
-                    _html += 'issue_over_time ';
-                } else if (period <= 2) {//紧张
-                    _html += 'issue_quick ';
-                } else if (period <= 5) {//进程
-                    _html += 'issue_week ';
+    if (this._json && this._json.length > 0) {
+        var _html = '<table class="list issues">';
+        _html += '<thead><tr><th>id</th><th>状态</th>';
+        _html += '<th>项目</th>';
+        _html += '<th>标题</th><th>指派给</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
+        var today = new Date().getDate();
+        $.each(this._json, function (i, prjInfo) {
+            var _count = 0;
+            $.each(prjInfo.issues, function (n, issue) {
+                if (issue.isClosed) {
+                    _count += 1;
                 }
-            } else {
-                _html += 'closed ';
-            }
-            _html += '">';
-            _html += '<td>' + issue.id + '</td>';
-            _html += '<td>' + issue.statusName + '</td>';
-            _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
-            _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
-            _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
-            _html += '<td>' + issue.startDate + '</td>';
-            _html += '<td>' + issue.dueDate + '</td>';
-            _html += '<td>' + issue.estimatedHours + '</td>';
-            _html += '</tr>';
-        })
-    });
-    _html += '</table>';
-
-    this._content.addClass('autoscroll').append(_html);
+            })
+            _html += '<tr class="group"><td colspan="8">';
+            _html += '<span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>';
+            _html += '<a href="javascript:void(0)" onclick="toggleRowGroup(this);">' + prjInfo.project.name + '</a>';
+            _html += '<span id="' + prjInfo.project.id + '_count" class="count">' + _count + '/' + prjInfo.issues.length + '</span>';
+            _html += '<a class="toggle-all" href="#" onclick="toggleAllRowGroups(this); return false;">Collapse all/Expand all</a>';
+            _html += '</td></tr>'
+            $.each(prjInfo.issues, function (n, issue) {
+                _html += '<tr class="issue ';
+                var dueDay = parseInt(/-(\d+)$/.exec(issue.dueDate)[1]);
+                if ((n + 1) % 2 == 0) {
+                    _html += 'even ';
+                } else {
+                    _html += 'odd ';
+                }
+                if (issue.isClosed == false) {
+                    var period = dueDay - today;
+                    if (period < 0) {//超时
+                        _html += 'issue_over_time ';
+                    } else if (period <= 2) {//紧张
+                        _html += 'issue_quick ';
+                    } else if (period <= 5) {//进程
+                        _html += 'issue_week ';
+                    }
+                } else {
+                    _html += 'closed ';
+                }
+                _html += '" style="display:none;">';
+                _html += '<td>' + issue.id + '</td>';
+                _html += '<td>' + issue.statusName + '</td>';
+                _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
+                _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
+                _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
+                _html += '<td>' + issue.startDate + '</td>';
+                _html += '<td>' + issue.dueDate + '</td>';
+                _html += '<td class="spent" pid="' + prjInfo.project.id + '">' + issue.estimatedHours + '</td>';
+                _html += '</tr>';
+            })
+        });
+        _html += '</table>';
+        this._content.addClass('autoscroll').append(_html);
+    }
 };
 
 ProjectIssueInfo.prototype.show = function () {
