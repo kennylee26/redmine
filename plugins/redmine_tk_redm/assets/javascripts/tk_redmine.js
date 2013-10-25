@@ -187,7 +187,7 @@ ProjectIssueInfo.prototype._generateView = function () {
         var _html = '<table class="list issues">';
         _html += '<thead><tr><th>id</th><th>状态</th>';
         _html += '<th>项目</th>';
-        _html += '<th>标题</th><th>指派给</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
+        _html += '<th>标题</th><th>责任人</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
         var today = new Date().getDate();
         $.each(this._json, function (i, prjInfo) {
             var _count = 0;
@@ -227,7 +227,7 @@ ProjectIssueInfo.prototype._generateView = function () {
                 _html += '<td>' + issue.statusName + '</td>';
                 _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
                 _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
-                _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
+                _html += '<td><a href="/users/' + issue.responsibleUser.id + '" target="_blank">' + issue.responsibleUser.name + '</a></td>';
                 _html += '<td>' + issue.startDate + '</td>';
                 _html += '<td>' + issue.dueDate + '</td>';
                 _html += '<td class="spent" pid="' + prjInfo.project.id + '">' + issue.estimatedHours + '</td>';

@@ -31,8 +31,8 @@
     <data-source source="LOCAL" name="Rails redmine: development" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="44eeb291-38bb-4cac-ae03-37d3952dc282">
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://127.0.0.1/redmine</jdbc-url>
-      <user-name>redmine</user-name>
-      <user-password>dfdedfc3dfc7dfcfdfc1dfcfdfd3df9bdf98df99df9edf9fdf9c</user-password>
+      <user-name>root</user-name>
+      <user-password>df9bdf9bdf9bdf9bdf9bdf9b</user-password>
       <libraries>
         <library>
           <url>file://$USER_HOME$/Library/Preferences/RubyMine50/jdbc-drivers/mysql-connector-license.txt</url>
