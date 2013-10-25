@@ -49,32 +49,59 @@ function WorkInfo() {
 
 WorkInfo.prototype = new Object();
 
-WorkInfo.prototype.show = function () {
-};
-
-WorkInfo.prototype.init = function () {
-    this._json = $.evalJSON($('#web_contents').text());
-    this._content = $('#show');
+WorkInfo.prototype.launch = function () {
+    var _userIssueInfo = new UserIssueInfo();
+    _userIssueInfo._create();
+    var _projectIssueInfo = new ProjectIssueInfo();
+    _projectIssueInfo._create();
+    _userIssueInfo.show();
+    $('#showIssueInfo').click(function () {
+        _projectIssueInfo.hide();
+        _userIssueInfo.show();
+        $(this).css('color','gray');
+        $('#showProjectInfo').css('color','');
+    }).click();
+    $('#showProjectInfo').click(function () {
+        _userIssueInfo.hide();
+        _projectIssueInfo.show();
+        $(this).css('color','gray');
+        $('#showIssueInfo').css('color','');
+    });
 };
 
 function UserIssueInfo() {
+    this._contentId = 'issue_info_contents';
+    this._containerId = 'issue_info';
+    this._content = '';
+    this._json = {};
+    this._title = '您好, 2013年10月份的工作信息如下:';
 };
 
-UserIssueInfo.prototype = new WorkInfo();
+UserIssueInfo.prototype = new Object();
 
-UserIssueInfo.prototype.show = function () {
-    this.init();
-    this._content.append('<h2>2013年10月份的工作信息如下:</h2>');
+UserIssueInfo.prototype.init = function () {
+    this._json = $.evalJSON($('#' + this._contentId).text());
+    this._content = $('#' + this._containerId);
+};
+
+UserIssueInfo.prototype._create = function () {
+    try {
+        this.init();
+    } catch (ex) {
+        $('#' + this._containerId).text($('#' + this._contentId).text());
+        return;
+    }
+    this._content.append('<h3>' + this._title + '</h3>');
     var _totalInfoHTML = '<div><ul>';
     _totalInfoHTML += '<li>已分配任务的总工时: ' + this._json.planingTime + ' 小时。</li>';
     _totalInfoHTML += '<li>已关闭的任务总工时: ' + this._json.finishedTime + ' 小时。</li>';
     _totalInfoHTML += '</ul></div>';
     this._content.append(_totalInfoHTML);
 
-    this._generateIssueView();
+    this._generateView();
 };
 
-UserIssueInfo.prototype._generateIssueView = function () {
+UserIssueInfo.prototype._generateView = function () {
     var _html = '<table class="list issues">';
     _html += '<thead><tr><th>id</th><th>状态</th>';
     _html += '<th>项目</th>';
@@ -103,10 +130,10 @@ UserIssueInfo.prototype._generateIssueView = function () {
         _html += '">';
         _html += '<td>' + issue.id + '</td>';
         _html += '<td>' + issue.statusName + '</td>';
-        _html += '<td><a href="/projects/' + issue.project.id + '" target="_blank">' + issue.project.name + '</a></td>';
+        _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
         _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
         _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
-        _html += '<td>' + issue.createdOn + '</td>';
+        _html += '<td>' + issue.startDate + '</td>';
         _html += '<td>' + issue.dueDate + '</td>';
         _html += '<td>' + issue.estimatedHours + '</td>';
         _html += '</tr>';
@@ -115,3 +142,99 @@ UserIssueInfo.prototype._generateIssueView = function () {
 
     this._content.addClass('autoscroll').append(_html);
 };
+
+UserIssueInfo.prototype.show = function () {
+    $('#issue_info_container').show();
+}
+
+UserIssueInfo.prototype.hide = function () {
+    $('#issue_info_container').hide();
+}
+
+function ProjectIssueInfo() {
+    this._contentId = 'project_info_contents';
+    this._containerId = 'project_info';
+    this._content = '';
+    this._json = {};
+    this._title = '您好, 2013年10月份你所管理的项目情况如下:';
+};
+
+ProjectIssueInfo.prototype = new Object();
+
+ProjectIssueInfo.prototype.init = function () {
+    this._json = $.evalJSON($('#' + this._contentId).text());
+    this._content = $('#' + this._containerId);
+};
+
+ProjectIssueInfo.prototype._create = function () {
+    try {
+        this.init();
+        if (this._json && this._json.length > 0) {
+            $('#project_menu').show();
+        }
+    } catch (ex) {
+        $('#' + this._containerId).text($('#' + this._contentId).text());
+        return;
+    }
+    this._content.append('<h3>' + this._title + '</h3>');
+
+    this._generateView();
+};
+
+ProjectIssueInfo.prototype._generateView = function () {
+    var _html = '<table class="list issues">';
+    _html += '<thead><tr><th>id</th><th>状态</th>';
+    _html += '<th>项目</th>';
+    _html += '<th>标题</th><th>指派给</th><th>开始日期</th><th>结束日期</th><th>预计耗时</th></tr></thead>';
+    var today = new Date().getDate();
+    $.each(this._json, function (i, prjInfo) {
+        _html += '<tr class="group open"><td colspan="8">';
+        _html += '<span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>';
+        _html += '<a href="/projects/' + prjInfo.project.identifier + '">' + prjInfo.project.name + '</a>';
+        _html += '<span class="count">' + prjInfo.issues.length + '</span>';
+        _html += '<a class="toggle-all" href="#" onclick="toggleAllRowGroups(this); return false;">Collapse all/Expand all</a>';
+        _html += '</td></tr>'
+        $.each(prjInfo.issues, function (n, issue) {
+            _html += '<tr class="issue ';
+            var dueDay = parseInt(/-(\d+)$/.exec(issue.dueDate)[1]);
+            if ((n + 1) % 2 == 0) {
+                _html += 'even ';
+            } else {
+                _html += 'odd ';
+            }
+            if (issue.isClosed == false) {
+                var period = dueDay - today;
+                if (period < 0) {//超时
+                    _html += 'issue_over_time ';
+                } else if (period <= 2) {//紧张
+                    _html += 'issue_quick ';
+                } else if (period <= 5) {//进程
+                    _html += 'issue_week ';
+                }
+            } else {
+                _html += 'closed ';
+            }
+            _html += '">';
+            _html += '<td>' + issue.id + '</td>';
+            _html += '<td>' + issue.statusName + '</td>';
+            _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
+            _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
+            _html += '<td><a href="/users/' + issue.assignedUser.id + '" target="_blank">' + issue.assignedUser.name + '</a></td>';
+            _html += '<td>' + issue.startDate + '</td>';
+            _html += '<td>' + issue.dueDate + '</td>';
+            _html += '<td>' + issue.estimatedHours + '</td>';
+            _html += '</tr>';
+        })
+    });
+    _html += '</table>';
+
+    this._content.addClass('autoscroll').append(_html);
+};
+
+ProjectIssueInfo.prototype.show = function () {
+    this._content.show();
+}
+
+ProjectIssueInfo.prototype.hide = function () {
+    this._content.hide();
+}

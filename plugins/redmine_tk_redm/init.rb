@@ -10,5 +10,5 @@ Redmine::Plugin.register :redmine_tk_redm do
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
 
-  menu :account_menu, :work_info, {:controller => 'work_info', :action => 'user_list'}, :if => Proc.new { User.current.logged? }, :caption => '本月绩效信息', :first => true
+  menu :account_menu, :work_info, {:controller => 'work_info', :action => 'index'}, :if => Proc.new { User.current.logged? }, :caption => '本月绩效信息', :first => true
 end

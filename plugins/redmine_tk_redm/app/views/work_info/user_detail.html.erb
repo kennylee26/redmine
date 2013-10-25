@@ -4,20 +4,32 @@
     <%= javascript_include_tag 'tk_redmine.js', :plugin => 'redmine_tk_redm' %>
 <% end %>
 
-<% if @users != nil %>
-    <form action="/work_info/user_detail/" class="user_detail_select">
-      <div class="r"><input type="submit" value="查询"/></div>
-      <div class="r"> <%= select_tag(:user_id, options_from_collection_for_select(@users, 'id', 'name', @tid)) %></div>
-      <div style="clear: both" />
-    </form>
-<% end %>
-<div id="web_contents" style="display: none">
-  <%= @web_contents %>
+<ul style="display: none;" id="project_menu">
+  <li>
+        <input type="button" value="个人绩效情况" id="showIssueInfo" />
+    <!--<a href="javascript:void(0)" id="showIssueInfo">个人绩效情况</a>--></li>
+  <li><input type="button" value="项目任务情况" id="showProjectInfo" /><!--<a href="javascript:void(0)" id="showProjectInfo">项目任务情况</a>--></li>
+</ul>
+<div style="clear: both"></div>
+<div id="issue_info_contents" style="display: none">
+  <%= @issue_info_contents %>
 </div>
-<div id="show">
-
+<div id="project_info_contents" style="display: none">
+  <%= @project_info_contents %>
 </div>
+<div id="issue_info_container" style="display: none;">
+  <% if @users != nil %>
+        <form action="/work_info/user_detail/" class="user_detail_select">
+          <div class="r"><input type="submit" value="查询"/></div>
+          <div class="r"> <%= select_tag(:user_id, options_from_collection_for_select(@users, 'id', 'name', @tid)) %></div>
+          <div style="clear: both" ></div>
+        </form>
+  <% end %>
+   <div id="issue_info" ></div>
+</div>
+<div></div>
+<div id="project_info" style="display: none;"></div>
 <script type="text/javascript">
-    var _workInfo = new UserIssueInfo();
-    _workInfo.show();
+    var _workInfo = new WorkInfo();
+    _workInfo.launch();
 </script>

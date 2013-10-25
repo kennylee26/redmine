@@ -18,3 +18,8 @@ tr.closed, #main tr.closed A {
     float: right;
     margin: 0 5px
 }
+
+#project_menu li{
+    float: left;
+    margin-left: 1.5em;
+}

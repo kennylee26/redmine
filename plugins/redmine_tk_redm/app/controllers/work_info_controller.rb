@@ -3,11 +3,10 @@ class WorkInfoController < ApplicationController
 
   @@service_ip = 'http://127.0.0.1:8090/rmh/controller'
 
-  def user_list
+  def index
     require_login || return
     user = User.current
     if user.admin then
-      #@web_contents = 'Im admin'
       redirect_to :action => 'user_detail', :id => user.id
     else
       redirect_to :action => 'user_detail', :id => user.id
@@ -27,14 +26,47 @@ class WorkInfoController < ApplicationController
       uid = @user.id
     end
     @tid = uid.to_s
-    remote_url = @@service_ip + '/ajax/user/work_info/'+@tid+'?type=all';
+    service_url = @@service_ip + '/ajax/user/work_info/'+@tid+'?type=all';
 
     require 'net/http'
     require 'uri'
 
+    @project_info_contents = ''
+    begin
+      res = Net::HTTP.get_response(URI(service_url))
+      @issue_info_contents = res.body.to_s.force_encoding('UTF-8')
+      if (@user.admin) then
+        service_url = @@service_ip + '/ajax/project/work_info/'+@user.id.to_s;
+        res = Net::HTTP.get_response(URI(service_url))
+        @project_info_contents = res.body.to_s.force_encoding('UTF-8')
+      end
+    rescue
+      @issue_info_contents = 'Remote Server ERROR!'
+      if (@user.admin) then
+        @project_info_contents = 'Remote Server ERROR!'
+      end
+    end
+  end
+
+  def project_list
+    require_login || return
+    @user = User.current
+    if @user.admin and (params[:user_id]!= nil or params[:id]!=nil) then
+      uid = params[:user_id]
+      if (uid==nil)
+        uid = params[:id]
+      end
+    else
+      uid = @user.id
+    end
+    @tid = uid.to_s
+    remote_url = @@service_ip + '/ajax/project/work_info/'+@tid;
+
+    require 'net/http'
+    require 'uri'
     begin
       res = Net::HTTP.get_response(URI(remote_url))
-      @web_contents = res.body
+      @web_contents = res.body.to_s.force_encoding('UTF-8')
     rescue
       @web_contents = 'Remote Server ERROR!'
     end
