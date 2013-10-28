@@ -45,15 +45,23 @@ function setStatusChange() {
 function WorkInfo() {
     this._json = {};
     this._content = $('body');
+    this._userIssueInfo = {};
+    this.__projectIssueInfo = {};
 }
 
 WorkInfo.prototype = new Object();
 
 WorkInfo.prototype.launch = function () {
-    var _userIssueInfo = new UserIssueInfo();
-    _userIssueInfo._create();
-    var _projectIssueInfo = new ProjectIssueInfo();
-    _projectIssueInfo._create();
+    this._userIssueInfo = new UserIssueInfo();
+    this._userIssueInfo._create();
+    this._projectIssueInfo = new ProjectIssueInfo();
+    this._projectIssueInfo._create();
+    this.addButListener();
+};
+
+WorkInfo.prototype.addButListener = function () {
+    var _projectIssueInfo = this._projectIssueInfo;
+    var _userIssueInfo = this._userIssueInfo;
     $('#showIssueInfo').click(function () {
         _projectIssueInfo.hide();
         _userIssueInfo.show();
@@ -66,7 +74,7 @@ WorkInfo.prototype.launch = function () {
         $(this).css('color', 'gray');
         $('#showIssueInfo').css('color', '');
     });
-};
+}
 
 function UserIssueInfo() {
     this._contentId = 'issue_info_contents';
@@ -196,7 +204,11 @@ ProjectIssueInfo.prototype._generateView = function () {
                     _count += 1;
                 }
             })
-            _html += '<tr class="group"><td colspan="8">';
+            _html += '<tr class="group ';
+            if (_count !== prjInfo.issues.length) {
+                _html += ' open';
+            }
+            _html += '"><td colspan="8">';
             _html += '<span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>';
             _html += '<a href="javascript:void(0)" onclick="toggleRowGroup(this);">' + prjInfo.project.name + '</a>';
             _html += '<span id="' + prjInfo.project.id + '_count" class="count">' + _count + '/' + prjInfo.issues.length + '</span>';
@@ -222,8 +234,11 @@ ProjectIssueInfo.prototype._generateView = function () {
                 } else {
                     _html += 'closed ';
                 }
-                _html += '" style="display:none;">';
-                _html += '<td>' + issue.id + '</td>';
+                _html += '"';
+                if (_count === prjInfo.issues.length) {
+                    _html += ' style="display:none;"';
+                }
+                _html += '><td>' + issue.id + '</td>';
                 _html += '<td>' + issue.statusName + '</td>';
                 _html += '<td><a href="/projects/' + issue.project.identifier + '/issues" target="_blank">' + issue.project.name + '</a></td>';
                 _html += '<td><a href="/issues/' + issue.id + '" target="_blank">' + issue.subject + '</a></td>';
