@@ -34,17 +34,13 @@ class WorkInfoController < ApplicationController
     @project_info_contents = ''
     begin
       res = Net::HTTP.get_response(URI(service_url))
-      @issue_info_contents = res.body#.to_s.force_encoding('UTF-8')
-      if (@user.admin) then
-        service_url = @@service_ip + '/ajax/project/work_info/'+@user.id.to_s;
-        res = Net::HTTP.get_response(URI(service_url))
-        @project_info_contents = res.body#.to_s.force_encoding('UTF-8')
-      end
+      @issue_info_contents = res.body #.to_s.force_encoding('UTF-8')
+      service_url = @@service_ip + '/ajax/project/work_info/'+@user.id.to_s;
+      res = Net::HTTP.get_response(URI(service_url))
+      @project_info_contents = res.body #.to_s.force_encoding('UTF-8')
     rescue
       @issue_info_contents = 'Remote Server ERROR!'
-      if (@user.admin) then
-        @project_info_contents = 'Remote Server ERROR!'
-      end
+      @project_info_contents = 'Remote Server ERROR!'
     end
   end
 
@@ -66,7 +62,7 @@ class WorkInfoController < ApplicationController
     require 'uri'
     begin
       res = Net::HTTP.get_response(URI(remote_url))
-      @web_contents = res.body#.to_s.force_encoding('UTF-8')
+      @web_contents = res.body #.to_s.force_encoding('UTF-8')
     rescue
       @web_contents = 'Remote Server ERROR!'
     end
