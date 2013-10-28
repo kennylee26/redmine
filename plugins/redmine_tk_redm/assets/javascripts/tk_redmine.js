@@ -44,9 +44,8 @@ function setStatusChange() {
 
 function WorkInfo() {
     this._json = {};
-    this._content = $('body');
     this._userIssueInfo = {};
-    this.__projectIssueInfo = {};
+    this._projectIssueInfo = {};
 }
 
 WorkInfo.prototype = new Object();
@@ -255,9 +254,9 @@ ProjectIssueInfo.prototype._generateView = function () {
 };
 
 ProjectIssueInfo.prototype.show = function () {
-    this._content.show();
+    $('#project_info').show();
 }
 
 ProjectIssueInfo.prototype.hide = function () {
-    this._content.hide();
+    $('#project_info').hide();
 }
