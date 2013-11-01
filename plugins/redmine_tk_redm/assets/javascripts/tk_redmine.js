@@ -81,7 +81,7 @@ function UserIssueInfo() {
     this._content = '';
     this._json = {};
     var _date = new Date();
-    this._title = '您好, ' + _date.getFullYear() + '年' + _date.getDate() + '月份的工作信息如下:';
+    this._title = '您好, ' + _date.getFullYear() + '年' + (_date.getMonth()+1) + '月份的工作信息如下:';
 };
 
 UserIssueInfo.prototype = new Object();
@@ -166,7 +166,7 @@ function ProjectIssueInfo() {
     this._content = '';
     this._json = {};
     var _date = new Date();
-    this._title = '您好, ' + _date.getFullYear() + '年' + _date.getDate() + '月份您所管理的项目情况如下:';
+    this._title = '您好, ' + _date.getFullYear() + '年' + (_date.getMonth()+1) + '月份您所管理的项目情况如下:';
 };
 
 ProjectIssueInfo.prototype = new Object();
