@@ -80,7 +80,8 @@ function UserIssueInfo() {
     this._containerId = 'issue_info';
     this._content = '';
     this._json = {};
-    this._title = '您好, 2013年10月份的工作信息如下:';
+    var _date = new Date();
+    this._title = '您好, ' + _date.getFullYear() + '年' + _date.getDate() + '月份的工作信息如下:';
 };
 
 UserIssueInfo.prototype = new Object();
@@ -164,7 +165,8 @@ function ProjectIssueInfo() {
     this._containerId = 'project_info';
     this._content = '';
     this._json = {};
-    this._title = '您好, 2013年10月份你所管理的项目情况如下:';
+    var _date = new Date();
+    this._title = '您好, ' + _date.getFullYear() + '年' + _date.getDate() + '月份您所管理的项目情况如下:';
 };
 
 ProjectIssueInfo.prototype = new Object();
