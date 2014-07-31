@@ -67,4 +67,22 @@ class WorkInfoController < ApplicationController
       @web_contents = 'Remote Server ERROR!'
     end
   end
+
+  def project_spent_time
+    require_login || return
+    if (params[:identifier] == nil)
+      @web_contents = '0'
+    else
+      remote_url = @@service_ip + '/ajax/project/time/' + params[:identifier];
+      require 'net/http'
+      require 'uri'
+      begin
+        res = Net::HTTP.get_response(URI(remote_url))
+        @web_contents = res.body #.to_s.force_encoding('UTF-8')
+      rescue
+        @web_contents = 'Remote Server ERROR!'
+      end
+    end
+  end
+
 end

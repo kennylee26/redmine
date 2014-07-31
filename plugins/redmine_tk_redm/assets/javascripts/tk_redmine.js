@@ -8,10 +8,14 @@ $(document).ready(function () {
         //设置加班、休假的默认选项
         setVacationIssue();
     } catch (ex) {
-        console.error('出错了，找李永坚...');
+        console.error('出错了，找管理员...');
         console.error(ex);
     }
 });
+
+function showProjectTotalSpentTime(){
+    var _url = '';
+}
 
 function setVacationIssue() {
     if ($('#issue_tracker_id option').filter(function () {
